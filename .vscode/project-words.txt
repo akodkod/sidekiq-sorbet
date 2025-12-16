@@ -1,0 +1,4 @@
+bindir
+Kodkod
+popen
+readlines
