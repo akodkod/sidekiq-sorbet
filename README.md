@@ -15,7 +15,7 @@ class AnalyzeAttachmentWorker
   end
 
   def run
-    # Direct access to typed arguments - no need for `args.`!
+    # Direct access to typed arguments
     attachment = Attachment.find(attachment_id)
     return if attachment.analyzed? && !regenerate
 
@@ -189,6 +189,63 @@ result = ProcessUserWorker.run_sync(user_id: 123)
 # In console for debugging
 AnalyzeAttachmentWorker.run_sync(attachment_id: 456)
 ```
+
+## Tapioca DSL Compiler
+
+This gem includes a Tapioca DSL compiler that generates proper type signatures for your workers. This enables Sorbet to understand the dynamically generated methods like `run_async`, `run_sync`, and argument accessors.
+
+### Generating RBI Files
+
+Run the Tapioca DSL compiler to generate type definitions:
+
+```bash
+bundle exec tapioca dsl SidekiqSorbet
+```
+
+Or generate RBI files for all DSL compilers:
+
+```bash
+bundle exec tapioca dsl
+```
+
+### Generated Signatures
+
+For a worker like this:
+
+```ruby
+class MyWorker
+  include Sidekiq::Sorbet
+
+  class Args < T::Struct
+    const :user_id, Integer
+    const :notify, T::Boolean, default: false
+  end
+
+  def run
+    # ...
+  end
+end
+```
+
+The compiler generates:
+
+```rbi
+class MyWorker
+  sig { returns(Integer) }
+  def user_id; end
+
+  sig { returns(T::Boolean) }
+  def notify; end
+
+  sig { params(user_id: Integer, notify: T::Boolean).returns(String) }
+  def self.run_async(user_id:, notify: T.unsafe(nil)); end
+
+  sig { params(user_id: Integer, notify: T::Boolean).returns(T.untyped) }
+  def self.run_sync(user_id:, notify: T.unsafe(nil)); end
+end
+```
+
+Workers without an `Args` class will still have `run_async` and `run_sync` generated with no parameters.
 
 ## Development
 

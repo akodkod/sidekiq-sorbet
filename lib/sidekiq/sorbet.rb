@@ -7,6 +7,14 @@ require_relative "sorbet/errors"
 require_relative "sorbet/class_methods"
 require_relative "sorbet/instance_methods"
 
+# Load Tapioca DSL compiler if Tapioca is available
+begin
+  require "tapioca/dsl"
+  require_relative "../tapioca/dsl/compilers/sidekiq_sorbet"
+rescue LoadError
+  # Tapioca not available, skip compiler
+end
+
 module Sidekiq
   module Sorbet
     extend T::Sig
