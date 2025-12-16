@@ -1,23 +1,45 @@
 # Sidekiq::Sorbet
 
-TODO: Delete this and the text below, and describe your gem
+Add typed arguments to your Sidekiq Workers.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sidekiq/sorbet`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Quick Example
+
+```ruby
+# Worker Class
+class AnalyzeAttachmentWorker
+  include Sidekiq::Job
+  include Sidekiq::Sorbet
+
+  class Args < T::Struct
+    const :attachment_id, Integer
+    const :regenerate, T::Boolean, default: false
+  end
+
+  def run
+    attachment = Attachment.find(attachment_id)       # attachment_id is typed here
+    return if attachment.analyzed? && !regenerate     # regenerate is type here too
+
+    attachment.analyze!
+  end
+end
+
+# Call Worker
+AnalyzeAttachmentWorker.run_async(attachment_id: 1)                     # arguments are typed and validated here
+AnalyzeAttachmentWorker.run_sync(attachment_id: 1, regenerate: true)    # arguments are typed and validated here too
+```
 
 ## Installation
-
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
 
 Install the gem and add to the application's Gemfile by executing:
 
 ```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+bundle add sidekiq-sorbet
 ```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+gem install sidekiq-sorbet
 ```
 
 ## Usage

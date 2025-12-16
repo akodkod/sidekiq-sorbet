@@ -1,4 +1,7 @@
 bindir
 Kodkod
+nilable
 popen
 readlines
+rubocop
+sidekiq
