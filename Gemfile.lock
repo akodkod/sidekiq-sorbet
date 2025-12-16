@@ -3,15 +3,18 @@ PATH
   specs:
     sidekiq-sorbet (0.1.0)
       sidekiq (>= 8.0)
+      sorbet-runtime (>= 0.6)
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
+    benchmark (0.5.0)
     connection_pool (3.0.2)
     date (3.5.1)
     diff-lcs (1.6.2)
     erb (6.0.1)
+    erubi (1.13.1)
     io-console (0.8.2)
     irb (1.15.3)
       pp (>= 0.6.0)
@@ -21,6 +24,8 @@ GEM
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
+    netrc (0.11.0)
+    openssl (3.3.2)
     parallel (1.27.0)
     parser (3.3.10.0)
       ast (~> 2.4.1)
@@ -36,6 +41,12 @@ GEM
     rack (3.2.4)
     rainbow (3.1.1)
     rake (13.3.1)
+    rbi (0.3.8)
+      prism (~> 1.0)
+      rbs (>= 3.4.4)
+    rbs (4.0.0.dev.4)
+      logger
+      prism (>= 1.3.0)
     rdoc (6.17.0)
       erb
       psych (>= 4.0.0)
@@ -45,6 +56,8 @@ GEM
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
+    require-hooks (0.2.2)
+    rexml (3.4.4)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -89,39 +102,76 @@ GEM
       logger (>= 1.7.0)
       rack (>= 3.2.0)
       redis-client (>= 0.26.0)
+    sorbet (0.6.12848)
+      sorbet-static (= 0.6.12848)
+    sorbet-runtime (0.6.12848)
+    sorbet-static (0.6.12848-universal-darwin)
+    sorbet-static-and-runtime (0.6.12848)
+      sorbet (= 0.6.12848)
+      sorbet-runtime (= 0.6.12848)
+    spoom (1.7.10)
+      erubi (>= 1.10.0)
+      prism (>= 0.28.0)
+      rbi (>= 0.3.3)
+      rbs (>= 4.0.0.dev.4)
+      rexml (>= 3.2.6)
+      sorbet-static-and-runtime (>= 0.5.10187)
+      thor (>= 0.19.2)
     stringio (3.1.9)
+    tapioca (0.17.10)
+      benchmark
+      bundler (>= 2.2.25)
+      netrc (>= 0.11.0)
+      parallel (>= 1.21.0)
+      rbi (>= 0.3.7)
+      require-hooks (>= 0.2.2)
+      sorbet-static-and-runtime (>= 0.5.11087)
+      spoom (>= 1.7.9)
+      thor (>= 1.2.0)
+      yard-sorbet
+    thor (1.4.0)
     tsort (0.2.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
+    yard (0.9.38)
+    yard-sorbet (0.9.0)
+      sorbet-runtime
+      yard
 
 PLATFORMS
   arm64-darwin-25
-  ruby
 
 DEPENDENCIES
   irb
-  rake (~> 13.3)
-  rspec (~> 3.13)
-  rubocop (~> 1.81)
-  rubocop-performance (~> 1.26)
-  rubocop-rake (~> 0.7.1)
-  rubocop-rspec (~> 3.8)
-  sidekiq (~> 8.0)
+  openssl (= 3.3.2)
+  rake
+  rspec
+  rubocop
+  rubocop-performance
+  rubocop-rake
+  rubocop-rspec
+  sidekiq
   sidekiq-sorbet!
+  sorbet-static-and-runtime
+  tapioca (~> 0.17.10)
 
 CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
+  benchmark (0.5.0) sha256=465df122341aedcb81a2a24b4d3bd19b6c67c1530713fd533f3ff034e419236c
   connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
   erb (6.0.1) sha256=28ecdd99c5472aebd5674d6061e3c6b0a45c049578b071e5a52c2a7f13c197e5
+  erubi (1.13.1) sha256=a082103b0885dbc5ecf1172fede897f9ebdb745a4b97a5e8dc63953db1ee4ad9
   io-console (0.8.2) sha256=d6e3ae7a7cc7574f4b8893b4fca2162e57a825b223a177b7afa236c5ef9814cc
   irb (1.15.3) sha256=4349edff1efa7ff7bfd34cb9df74a133a588ba88c2718098b3b4468b81184aaa
   json (2.18.0) sha256=b10506aee4183f5cf49e0efc48073d7b75843ce3782c68dbeb763351c08fd505
   language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
+  netrc (0.11.0) sha256=de1ce33da8c99ab1d97871726cba75151113f117146becbe45aa85cb3dabee3f
+  openssl (3.3.2) sha256=7f4e01215dc9c4be1fca71d692406be3e6340b39c1f71a47fea9c497decd0f6c
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   parser (3.3.10.0) sha256=ce3587fa5cc55a88c4ba5b2b37621b3329aadf5728f9eafa36bbd121462aabd6
   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
@@ -132,10 +182,14 @@ CHECKSUMS
   rack (3.2.4) sha256=5d74b6f75082a643f43c1e76b419c40f0e5527fcfee1e669ac1e6b73c0ccb6f6
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.3.1) sha256=8c9e89d09f66a26a01264e7e3480ec0607f0c497a861ef16063604b1b08eb19c
+  rbi (0.3.8) sha256=ec680f32be5ffac2d34f81ef47fae751e2ada537cd0dab87bf80807b15d8d429
+  rbs (4.0.0.dev.4) sha256=a4a22ba03d2450e2a18c312b0b05cdc7b8b5d5c9fe255fc32cfea12ff1dd058b
   rdoc (6.17.0) sha256=0f50d4e568fc98195f9bb155a9e8dff6c7feabfb515fb22ef6df1d12ad5a02b7
   redis-client (0.26.2) sha256=1336fb5a7202d398b719531853c184b7c9cbdcace1f00f8356062b9dfba6779b
   regexp_parser (2.11.3) sha256=ca13f381a173b7a93450e53459075c9b76a10433caadcb2f1180f2c741fc55a4
   reline (0.6.3) sha256=1198b04973565b36ec0f11542ab3f5cfeeec34823f4e54cebde90968092b1835
+  require-hooks (0.2.2) sha256=effa81b61a669ca00cb1e8910411e0d6a8bb16b49a53d9e69b5e6372d6c90f31
+  rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   rspec (3.13.2) sha256=206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587
   rspec-core (3.13.6) sha256=a8823c6411667b60a8bca135364351dda34cd55e44ff94c4be4633b37d828b2d
   rspec-expectations (3.13.5) sha256=33a4d3a1d95060aea4c94e9f237030a8f9eae5615e9bd85718fe3a09e4b58836
@@ -149,10 +203,19 @@ CHECKSUMS
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   sidekiq (8.1.0) sha256=6bde5eaee9e4d7b1121e97ebd585273627fb32b1f870a47893723572479ad1e4
   sidekiq-sorbet (0.1.0)
+  sorbet (0.6.12848) sha256=996776913b0d45a5bec8ac2abb7dccba5adbf5ac4a6e49dacd0f9d055ef95a72
+  sorbet-runtime (0.6.12848) sha256=25d115576572dffbc4f22fc627709e91af335ce175d564b0adf6d735c1a04239
+  sorbet-static (0.6.12848-universal-darwin) sha256=08ef8efc749da6d4bec811c40e1f0ac40a675a5338cc1f114f2596c02ee3c142
+  sorbet-static-and-runtime (0.6.12848) sha256=f48af534cb726df7543d4af9573e99a2c824c8438945f432cc4fbe4a994833c3
+  spoom (1.7.10) sha256=7e500f004857bcbed5dff09c25720d4693e80accd783945136fafc9e5a4de44b
   stringio (3.1.9) sha256=c111af13d3a73eab96a3bc2655ecf93788d13d28cb8e25c1dcbff89ace885121
+  tapioca (0.17.10) sha256=880a682ca8314f798dd09e9f104134fbf1a713c13be51f7dd4741dd434e6471b
+  thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
   tsort (0.2.0) sha256=9650a793f6859a43b6641671278f79cfead60ac714148aabe4e3f0060480089f
   unicode-display_width (3.2.0) sha256=0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42
   unicode-emoji (4.1.0) sha256=4997d2d5df1ed4252f4830a9b6e86f932e2013fbff2182a9ce9ccabda4f325a5
+  yard (0.9.38) sha256=721fb82afb10532aa49860655f6cc2eaa7130889df291b052e1e6b268283010f
+  yard-sorbet (0.9.0) sha256=03d1aa461b9e9c82b886919a13aa3e09fcf4d1852239d2967ed97e92723ffe21
 
 BUNDLED WITH
   4.0.1

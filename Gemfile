@@ -5,12 +5,18 @@ source "https://rubygems.org"
 gemspec
 
 gem "irb"
-gem "rake", "~> 13.3"
-gem "rspec", "~> 3.13"
+gem "rake"
+gem "rspec"
 
-gem "sidekiq", "~> 8.0"
+gem "sidekiq"
 
-gem "rubocop", "~> 1.81"
-gem "rubocop-performance", "~> 1.26"
-gem "rubocop-rake", "~> 0.7.1"
-gem "rubocop-rspec", "~> 3.8"
+gem "rubocop"
+gem "rubocop-performance"
+gem "rubocop-rake"
+gem "rubocop-rspec"
+
+gem "sorbet-static-and-runtime"
+gem "tapioca", "~> 0.17.10"
+
+# Fix OpenSSL 3.x CRL verification issues
+gem "openssl", "3.3.2"
