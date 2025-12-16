@@ -8,16 +8,16 @@ Gem::Specification.new do |spec|
   spec.authors = ["Andrew Kodkod"]
   spec.email = ["andrew@kodkod.me"]
 
-  spec.summary = "TODO: Write a short summary, because RubyGems requires one."
-  spec.description = "TODO: Write a longer description or delete this line."
-  spec.homepage = "TODO: Put your gem's website or public repo URL here."
+  spec.summary = "Typed arguments for Sidekiq Workers"
+  spec.description = "Add typed arguments to your Sidekiq Workers with automatic argument access"
+  spec.homepage = "https://github.com/akodkod/sidekiq-sorbet"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["source_code_uri"] = "https://github.com/akodkod/sidekiq-sorbet"
+  spec.metadata["changelog_uri"] = "https://github.com/akodkod/sidekiq-sorbet/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.
