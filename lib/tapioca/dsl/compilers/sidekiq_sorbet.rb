@@ -41,6 +41,9 @@ module Tapioca
       #   # def self.run_sync(user_id:, notify: false); end
       class SidekiqSorbet < Compiler
         extend T::Sig
+        extend T::Generic
+
+        ConstantType = type_member { { fixed: T.class_of(::Sidekiq::Sorbet) } }
 
         sig { override.void }
         def decorate
@@ -53,7 +56,7 @@ module Tapioca
           end
         end
 
-        sig { override.returns(T::Enumerable[Module]) }
+        sig { override.returns(T::Enumerable[T::Module[T.anything]]) }
         def self.gather_constants
           all_classes.select do |c|
             c.is_a?(Class) && c.included_modules.include?(::Sidekiq::Sorbet)
@@ -73,7 +76,7 @@ module Tapioca
         def generate_argument_accessors(klass)
           return unless args_class
 
-          args_class.props.each do |field_name, prop_info|
+          T.must(args_class).props.each do |field_name, prop_info|
             type = prop_info[:type_object].to_s
 
             klass.create_method(
@@ -127,7 +130,7 @@ module Tapioca
         def build_params_signature
           return [] unless args_class
 
-          args_class.props.map do |field_name, prop_info|
+          T.must(args_class).props.map do |field_name, prop_info|
             type = prop_info[:type_object].to_s
             has_default = prop_info.key?(:default)
 
