@@ -82,3 +82,23 @@ end
 class Sidekiq::WorkSet
   Elem = type_member { { fixed: T.untyped } }
 end
+
+module Sidekiq::Testing
+  sig { void }
+  def self.disable!; end
+
+  sig { void }
+  def self.fake!; end
+
+  sig { void }
+  def self.inline!; end
+
+  sig { returns(T::Boolean) }
+  def self.enabled?; end
+
+  sig { returns(T::Boolean) }
+  def self.inline; end
+
+  sig { returns(T::Boolean) }
+  def self.fake; end
+end

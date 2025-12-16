@@ -1,13 +1,12 @@
 # Sidekiq::Sorbet
 
-Add typed arguments to your Sidekiq Workers.
+Add typed arguments to your Sidekiq Workers with automatic argument access.
 
 ## Quick Example
 
 ```ruby
 # Worker Class
 class AnalyzeAttachmentWorker
-  include Sidekiq::Job
   include Sidekiq::Sorbet
 
   class Args < T::Struct
@@ -16,17 +15,28 @@ class AnalyzeAttachmentWorker
   end
 
   def run
-    attachment = Attachment.find(attachment_id)       # attachment_id is typed here
-    return if attachment.analyzed? && !regenerate     # regenerate is type here too
+    # Direct access to typed arguments - no need for `args.`!
+    attachment = Attachment.find(attachment_id)
+    return if attachment.analyzed? && !regenerate
 
     attachment.analyze!
   end
 end
 
 # Call Worker
-AnalyzeAttachmentWorker.run_async(attachment_id: 1)                     # arguments are typed and validated here
-AnalyzeAttachmentWorker.run_sync(attachment_id: 1, regenerate: true)    # arguments are typed and validated here too
+AnalyzeAttachmentWorker.run_async(attachment_id: 1)                     # arguments are typed and validated
+AnalyzeAttachmentWorker.run_sync(attachment_id: 1, regenerate: true)    # execute synchronously
 ```
+
+## Features
+
+- ✅ **Direct argument access** - Access arguments directly as `attachment_id` instead of `args.attachment_id`
+- ✅ **Type safety** - Arguments are validated at enqueue time using Sorbet's T::Struct
+- ✅ **Optional Args** - Workers can omit the Args class if they don't need arguments
+- ✅ **Backward compatible** - The `args` accessor still works: `args.attachment_id`
+- ✅ **Clean API** - Use `run_async`/`run_sync` instead of `perform_async`/`perform`
+- ✅ **Fail-fast validation** - Errors caught before jobs are enqueued
+- ✅ **Comprehensive errors** - Clear error messages for debugging
 
 ## Installation
 
@@ -44,7 +54,141 @@ gem install sidekiq-sorbet
 
 ## Usage
 
-TODO: Write usage instructions here
+### Basic Worker with Arguments
+
+```ruby
+class ProcessUserWorker
+  include Sidekiq::Sorbet
+
+  class Args < T::Struct
+    const :user_id, Integer
+    const :send_email, T::Boolean, default: true
+  end
+
+  def run
+    user = User.find(user_id)
+    user.process!
+    UserMailer.processed(user).deliver_later if send_email
+  end
+end
+
+# Enqueue the job
+ProcessUserWorker.run_async(user_id: 123)
+ProcessUserWorker.run_async(user_id: 456, send_email: false)
+```
+
+### Worker Without Arguments
+
+Args class is optional! Workers without arguments work perfectly:
+
+```ruby
+class CleanupWorker
+  include Sidekiq::Sorbet
+
+  def run
+    # Perform cleanup tasks
+    clean_temp_files
+    vacuum_database
+  end
+end
+
+# No arguments needed
+CleanupWorker.run_async
+```
+
+### Complex Types
+
+```ruby
+class ReportWorker
+  include Sidekiq::Sorbet
+
+  class Args < T::Struct
+    const :user_ids, T::Array[Integer]
+    const :filters, T::Hash[String, T.untyped], default: {}
+    const :format, String
+  end
+
+  def run
+    users = User.where(id: user_ids)
+    report = ReportGenerator.new(users, filters)
+    report.export(format)
+  end
+end
+
+ReportWorker.run_async(
+  user_ids: [1, 2, 3],
+  filters: { "active" => true },
+  format: "pdf",
+)
+```
+
+### Nested T::Structs
+
+```ruby
+class NotificationWorker
+  include Sidekiq::Sorbet
+
+  class Recipient < T::Struct
+    const :name, String
+    const :email, String
+  end
+
+  class Args < T::Struct
+    const :recipient, Recipient
+    const :message, String
+  end
+
+  def run
+    # Access nested struct fields
+    email = NotificationMailer.compose(
+      to: recipient.email,
+      name: recipient.name,
+      body: message,
+    )
+    email.deliver
+  end
+end
+
+NotificationWorker.run_async(
+  recipient: NotificationWorker::Recipient.new(
+    name: "John Doe",
+    email: "john@example.com",
+  ),
+  message: "Hello!",
+)
+```
+
+### Backward Compatibility
+
+The `args` accessor still works if you prefer the old style:
+
+```ruby
+class LegacyWorker
+  include Sidekiq::Sorbet
+
+  class Args < T::Struct
+    const :value, Integer
+  end
+
+  def run
+    # Both styles work
+    direct = value           # Direct access (recommended)
+    via_args = args.value    # Via args accessor (still works)
+  end
+end
+```
+
+### Synchronous Execution
+
+Use `run_sync` for testing or immediate execution:
+
+```ruby
+# In tests
+result = ProcessUserWorker.run_sync(user_id: 123)
+
+# In console for debugging
+AnalyzeAttachmentWorker.run_sync(attachment_id: 456)
+```
 
 ## Development
 

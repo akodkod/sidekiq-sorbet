@@ -63,6 +63,10 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/NestedGroups:
   Max: 5
 
+RSpec/DescribeClass:
+  Exclude:
+    - spec/sidekiq/sorbet/*_spec.rb
+
 Style/ClassVars:
   Enabled: false
 
@@ -98,4 +102,9 @@ Style/WordArray:
   EnforcedStyle: brackets
 
 Style/NumericPredicate:
+  Enabled: false
+
+# Anonymous kwargs forwarding (**) doesn't work well with Sorbet signatures
+# Keep explicit **kwargs for compatibility
+Style/ArgumentsForwarding:
   Enabled: false

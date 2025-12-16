@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
+require "simplecov"
+SimpleCov.start
+
 require "sidekiq/sorbet"
+require "sidekiq/testing"
+
+# Load all test workers
+Dir[File.join(__dir__, "support/workers/**/*.rb")].each { |file| require file }
+
+# Use inline mode so jobs execute immediately for testing
+Sidekiq::Testing.inline!
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
