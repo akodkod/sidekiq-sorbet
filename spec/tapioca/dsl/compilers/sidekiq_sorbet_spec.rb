@@ -48,6 +48,10 @@ RSpec.describe Tapioca::Dsl::Compilers::SidekiqSorbet do
         # Class methods
         expect(output).to include("sig { params(value: Integer).returns(String) }")
         expect(output).to include("def self.run_async(value:); end")
+        expect(output).to include("sig { params(time: T.any(Time, Numeric), value: Integer).returns(String) }")
+        expect(output).to include("def self.run_at(time, value:); end")
+        expect(output).to include("sig { params(interval: Numeric, value: Integer).returns(String) }")
+        expect(output).to include("def self.run_in(interval, value:); end")
         expect(output).to include("sig { params(value: Integer).returns(T.untyped) }")
         expect(output).to include("def self.run_sync(value:); end")
       end
@@ -97,6 +101,10 @@ RSpec.describe Tapioca::Dsl::Compilers::SidekiqSorbet do
         # Class methods with no params
         expect(output).to include("sig { returns(String) }")
         expect(output).to include("def self.run_async; end")
+        expect(output).to include("sig { params(time: T.any(Time, Numeric)).returns(String) }")
+        expect(output).to include("def self.run_at(time); end")
+        expect(output).to include("sig { params(interval: Numeric).returns(String) }")
+        expect(output).to include("def self.run_in(interval); end")
         expect(output).to include("sig { returns(T.untyped) }")
         expect(output).to include("def self.run_sync; end")
       end

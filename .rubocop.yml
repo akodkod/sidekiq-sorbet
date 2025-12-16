@@ -55,7 +55,7 @@ RSpec/MultipleDescribes:
   Enabled: false
 
 RSpec/MultipleExpectations:
-  Max: 10
+  Max: 15
 
 RSpec/MultipleMemoizedHelpers:
   Max: 10

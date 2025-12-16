@@ -22,6 +22,34 @@ module Sidekiq
         perform_async(serialized)
       end
 
+      # Enqueues a job to be performed at a specific time with validated arguments
+      #
+      # @param time [Time, Numeric] When to perform the job (timestamp or Time object)
+      # @param kwargs [Hash] Arguments matching the Args T::Struct (or empty if no Args)
+      # @return [String] Sidekiq job ID
+      # @raise [InvalidArgsError] if arguments fail validation
+      # @raise [SerializationError] if serialization fails
+      sig { params(time: T.any(Time, Numeric), kwargs: T.untyped).returns(String) }
+      def run_at(time, **kwargs)
+        args_instance = build_args(**kwargs)
+        serialized = serialize_args(args_instance)
+        perform_at(time, serialized)
+      end
+
+      # Enqueues a job to be performed after a delay with validated arguments
+      #
+      # @param interval [Numeric] How long to wait before performing (in seconds)
+      # @param kwargs [Hash] Arguments matching the Args T::Struct (or empty if no Args)
+      # @return [String] Sidekiq job ID
+      # @raise [InvalidArgsError] if arguments fail validation
+      # @raise [SerializationError] if serialization fails
+      sig { params(interval: Numeric, kwargs: T.untyped).returns(String) }
+      def run_in(interval, **kwargs)
+        args_instance = build_args(**kwargs)
+        serialized = serialize_args(args_instance)
+        perform_in(interval, serialized)
+      end
+
       # Executes a job synchronously with validated arguments
       #
       # @param kwargs [Hash] Arguments matching the Args T::Struct (or empty if no Args)

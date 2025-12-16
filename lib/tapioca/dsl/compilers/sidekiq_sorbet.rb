@@ -47,6 +47,8 @@ module Tapioca
           root.create_path(constant) do |klass|
             generate_argument_accessors(klass) if args_class
             generate_run_async_method(klass)
+            generate_run_at_method(klass)
+            generate_run_in_method(klass)
             generate_run_sync_method(klass)
           end
         end
@@ -92,6 +94,26 @@ module Tapioca
         end
 
         sig { params(klass: RBI::Scope).void }
+        def generate_run_at_method(klass)
+          klass.create_method(
+            "run_at",
+            parameters: build_time_params_signature,
+            return_type: "String",
+            class_method: true,
+          )
+        end
+
+        sig { params(klass: RBI::Scope).void }
+        def generate_run_in_method(klass)
+          klass.create_method(
+            "run_in",
+            parameters: build_interval_params_signature,
+            return_type: "String",
+            class_method: true,
+          )
+        end
+
+        sig { params(klass: RBI::Scope).void }
         def generate_run_sync_method(klass)
           klass.create_method(
             "run_sync",
@@ -117,6 +139,24 @@ module Tapioca
 
             RBI::TypedParam.new(param: param, type: type)
           end
+        end
+
+        sig { returns(T::Array[RBI::TypedParam]) }
+        def build_time_params_signature
+          time_param = RBI::TypedParam.new(
+            param: RBI::ReqParam.new("time"),
+            type: "T.any(Time, Numeric)",
+          )
+          [time_param, *build_params_signature]
+        end
+
+        sig { returns(T::Array[RBI::TypedParam]) }
+        def build_interval_params_signature
+          interval_param = RBI::TypedParam.new(
+            param: RBI::ReqParam.new("interval"),
+            type: "Numeric",
+          )
+          [interval_param, *build_params_signature]
         end
       end
     end

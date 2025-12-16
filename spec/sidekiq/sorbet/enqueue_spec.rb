@@ -77,6 +77,83 @@ RSpec.describe "Sidekiq::Sorbet enqueueing jobs" do
     end
   end
 
+  describe ".run_at" do
+    context "with valid arguments" do
+      it "schedules a job at a specific time" do
+        time = Time.now + 3600
+        expect do
+          SimpleWorker.run_at(time, value: 10)
+        end.not_to raise_error
+      end
+
+      it "returns a job ID" do
+        time = Time.now + 3600
+        jid = SimpleWorker.run_at(time, value: 10)
+        expect(jid).to be_a(String)
+        expect(jid).not_to be_empty
+      end
+
+      it "accepts numeric timestamp" do
+        timestamp = Time.now.to_f + 3600
+        expect do
+          SimpleWorker.run_at(timestamp, value: 10)
+        end.not_to raise_error
+      end
+
+      it "validates arguments before scheduling" do
+        time = Time.now + 3600
+        expect do
+          SimpleWorker.run_at(time, value: "not an integer")
+        end.to raise_error(Sidekiq::Sorbet::InvalidArgsError, /Invalid arguments/)
+      end
+    end
+
+    context "with default values" do
+      it "works when optional field is omitted" do
+        time = Time.now + 3600
+        expect do
+          WorkerWithDefaults.run_at(time, required_field: "test")
+        end.not_to raise_error
+      end
+    end
+  end
+
+  describe ".run_in" do
+    context "with valid arguments" do
+      it "schedules a job after a delay" do
+        expect do
+          SimpleWorker.run_in(3600, value: 10)
+        end.not_to raise_error
+      end
+
+      it "returns a job ID" do
+        jid = SimpleWorker.run_in(3600, value: 10)
+        expect(jid).to be_a(String)
+        expect(jid).not_to be_empty
+      end
+
+      it "accepts float interval" do
+        expect do
+          SimpleWorker.run_in(3600.5, value: 10)
+        end.not_to raise_error
+      end
+
+      it "validates arguments before scheduling" do
+        expect do
+          SimpleWorker.run_in(3600, value: "not an integer")
+        end.to raise_error(Sidekiq::Sorbet::InvalidArgsError, /Invalid arguments/)
+      end
+    end
+
+    context "with default values" do
+      it "works when optional field is omitted" do
+        expect do
+          WorkerWithDefaults.run_in(3600, required_field: "test")
+        end.not_to raise_error
+      end
+    end
+  end
+
   describe ".run_sync" do
     context "with valid arguments" do
       it "executes the job synchronously" do

@@ -12,6 +12,8 @@ RSpec.describe Sidekiq::Sorbet do
 
     it "extends ClassMethods" do
       expect(SimpleWorker).to respond_to(:run_async)
+      expect(SimpleWorker).to respond_to(:run_at)
+      expect(SimpleWorker).to respond_to(:run_in)
       expect(SimpleWorker).to respond_to(:run_sync)
       expect(SimpleWorker).to respond_to(:args_class)
     end
