@@ -10,6 +10,7 @@ AllCops:
   TargetRubyVersion: 3.2
   Exclude:
     - sorbet/**/*.rbi
+    - vendor/**/*
 
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
