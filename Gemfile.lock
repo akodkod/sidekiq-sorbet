@@ -113,6 +113,7 @@ GEM
       sorbet-static (= 0.6.12848)
     sorbet-runtime (0.6.12848)
     sorbet-static (0.6.12848-universal-darwin)
+    sorbet-static (0.6.12848-x86_64-linux)
     sorbet-static-and-runtime (0.6.12848)
       sorbet (= 0.6.12848)
       sorbet-runtime (= 0.6.12848)
@@ -148,6 +149,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-25
+  x86_64-linux
 
 DEPENDENCIES
   irb
@@ -218,6 +220,7 @@ CHECKSUMS
   sorbet (0.6.12848) sha256=996776913b0d45a5bec8ac2abb7dccba5adbf5ac4a6e49dacd0f9d055ef95a72
   sorbet-runtime (0.6.12848) sha256=25d115576572dffbc4f22fc627709e91af335ce175d564b0adf6d735c1a04239
   sorbet-static (0.6.12848-universal-darwin) sha256=08ef8efc749da6d4bec811c40e1f0ac40a675a5338cc1f114f2596c02ee3c142
+  sorbet-static (0.6.12848-x86_64-linux) sha256=f1d41763c67a2a1bc3ad8589faaac17d3fd676868f9e31a942bf56f2d5589e05
   sorbet-static-and-runtime (0.6.12848) sha256=f48af534cb726df7543d4af9573e99a2c824c8438945f432cc4fbe4a994833c3
   spoom (1.7.10) sha256=7e500f004857bcbed5dff09c25720d4693e80accd783945136fafc9e5a4de44b
   stringio (3.1.9) sha256=c111af13d3a73eab96a3bc2655ecf93788d13d28cb8e25c1dcbff89ace885121

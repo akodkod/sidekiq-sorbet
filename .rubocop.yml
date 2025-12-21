@@ -79,10 +79,6 @@ Style/Documentation:
 Style/GuardClause:
   Enabled: false
 
-Style/OptionalBooleanParameter:
-  Exclude:
-    - lib/light/services/rspec/matchers/**/*.rb
-
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
