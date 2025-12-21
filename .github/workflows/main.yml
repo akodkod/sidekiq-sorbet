@@ -10,11 +10,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+    name: Ruby ${{ matrix.ruby }} / Sidekiq ${{ matrix.sidekiq }}
     strategy:
       matrix:
         ruby:
           - '3.4.7'
+        sidekiq:
+          - '7'
+          - '8'
 
     steps:
       - uses: actions/checkout@v4
@@ -25,5 +28,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+      - name: Install Appraisal dependencies
+        run: bundle exec appraisal sidekiq-${{ matrix.sidekiq }} bundle install
       - name: Run the default task
-        run: bundle exec rake
+        run: bundle exec appraisal sidekiq-${{ matrix.sidekiq }} rake
