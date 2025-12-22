@@ -123,7 +123,7 @@ module Sidekiq
               "Invalid arguments for #{name}: #{e.message}"
       end
 
-      # Serializes Args instance to JSON-compatible hash
+      # Serializes Args instance to JSON-compatible hash using sorbet-schema
       #
       # @param args_instance [T::Struct, nil] The Args instance or nil
       # @return [Hash] Serialized hash with string keys (empty if nil)
@@ -132,10 +132,37 @@ module Sidekiq
       def serialize_args(args_instance)
         return {} unless args_instance
 
-        args_instance.serialize
+        serializer = Typed::HashSerializer.new(
+          schema: args_instance.class.schema,
+          should_serialize_values: true,
+        )
+        result = serializer.serialize(args_instance)
+
+        if result.success?
+          # Convert to string keys for Sidekiq strict args validation
+          deep_stringify_keys(result.payload)
+        else
+          raise SerializationError,
+                "Failed to serialize args for #{name}: #{result.error.message}"
+        end
+      rescue SerializationError
+        raise
       rescue StandardError => e
         raise SerializationError,
               "Failed to serialize args for #{name}: #{e.message}"
+      end
+
+      # Recursively converts all hash keys to strings for Sidekiq compatibility
+      sig { params(obj: T.untyped).returns(T.untyped) }
+      def deep_stringify_keys(obj)
+        case obj
+        when Hash
+          obj.transform_keys(&:to_s).transform_values { |v| deep_stringify_keys(v) }
+        when Array
+          obj.map { |v| deep_stringify_keys(v) }
+        else
+          obj
+        end
       end
     end
   end

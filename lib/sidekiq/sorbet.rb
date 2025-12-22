@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require "sorbet-runtime"
+require "sorbet-schema"
 require_relative "sorbet/version"
 require_relative "sorbet/errors"
 require_relative "sorbet/class_methods"

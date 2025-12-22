@@ -466,6 +466,35 @@ RSpec::Support::EncodedString::US_ASCII = T.let(T.unsafe(nil), String)
 # source://rspec-support//lib/rspec/support/encoded_string.rb#8
 RSpec::Support::EncodedString::UTF_8 = T.let(T.unsafe(nil), String)
 
+# Provides a means to fuzzy-match between two arbitrary objects.
+# Understands array/hash nesting. Uses `===` or `==` to
+# perform the matching.
+#
+# source://rspec-support//lib/rspec/support/fuzzy_matcher.rb#8
+module RSpec::Support::FuzzyMatcher
+  class << self
+    # @api private
+    # @return [Boolean]
+    #
+    # source://rspec-support//lib/rspec/support/fuzzy_matcher.rb#10
+    def values_match?(expected, actual); end
+
+    private
+
+    # @private
+    # @return [Boolean]
+    #
+    # source://rspec-support//lib/rspec/support/fuzzy_matcher.rb#29
+    def arrays_match?(expected_list, actual_list); end
+
+    # @private
+    # @return [Boolean]
+    #
+    # source://rspec-support//lib/rspec/support/fuzzy_matcher.rb#38
+    def hashes_match?(expected_hash, actual_hash); end
+  end
+end
+
 # @private
 #
 # source://rspec-support//lib/rspec/support/hunk_generator.rb#9

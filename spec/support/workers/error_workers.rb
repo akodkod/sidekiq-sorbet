@@ -29,15 +29,17 @@ class WorkerThatRaisesError
 end
 
 # Test worker with Args that has a custom serialization issue
+# Note: With HashSerializer, serialization of valid structs doesn't fail,
+# so we use an invalid schema setup to trigger errors
 class WorkerWithSerializationError
   include Sidekiq::Sorbet
 
   class BadArgs < T::Struct
     const :value, Integer
 
-    # Override serialize to cause an error
-    def serialize
-      raise StandardError, "Serialization failed!"
+    # Override schema to return nil, which will cause HashSerializer to fail
+    def self.schema
+      nil
     end
   end
 
@@ -50,16 +52,13 @@ class WorkerWithSerializationError
 end
 
 # Test worker with Args that has deserialization issues
+# HashSerializer fails when required fields are missing or types can't be coerced
 class WorkerWithDeserializationError
   include Sidekiq::Sorbet
 
   class BadArgs < T::Struct
     const :value, Integer
-
-    # Override from_hash to cause an error
-    def self.from_hash(_hash)
-      raise StandardError, "Deserialization failed!"
-    end
+    const :required_field, String # This will cause deserialization to fail if missing
   end
 
   Args = BadArgs

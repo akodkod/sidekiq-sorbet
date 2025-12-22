@@ -10,3 +10,4 @@
 !/sorbet/cache/.keep
 *.gem
 .rspec_status
+.DS_Store

@@ -69,7 +69,7 @@ module Sidekiq
 
       private
 
-      # Deserializes hash back into Args T::Struct
+      # Deserializes hash back into Args T::Struct using sorbet-schema
       #
       # @param serialized_hash [Hash] Hash with string keys from Sidekiq
       # @return [T::Struct, nil] Deserialized Args instance or nil
@@ -79,10 +79,15 @@ module Sidekiq
         args_klass = self.class.args_class
         return nil unless args_klass
 
-        args_klass.from_hash(serialized_hash)
-      rescue StandardError => e
-        raise SerializationError,
-              "Failed to deserialize args for #{self.class.name}: #{e.message}"
+        serializer = Typed::HashSerializer.new(schema: args_klass.schema)
+        result = serializer.deserialize(serialized_hash)
+
+        if result.success?
+          result.payload
+        else
+          raise SerializationError,
+                "Failed to deserialize args for #{self.class.name}: #{result.error.message}"
+        end
       end
     end
   end

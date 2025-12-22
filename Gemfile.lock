@@ -4,6 +4,7 @@ PATH
     sidekiq-sorbet (0.2.0)
       sidekiq (>= 7.0)
       sorbet-runtime (>= 0.6)
+      sorbet-schema (>= 0.9)
 
 GEM
   remote: https://rubygems.org/
@@ -115,12 +116,21 @@ GEM
     simplecov_json_formatter (0.1.4)
     sorbet (0.6.12848)
       sorbet-static (= 0.6.12848)
+    sorbet-result (1.4.0)
+      sorbet-runtime (~> 0.5)
     sorbet-runtime (0.6.12848)
+    sorbet-schema (0.9.3)
+      sorbet-result (~> 1.1)
+      sorbet-runtime (~> 0.5)
+      sorbet-struct-comparable (~> 1.3)
+      zeitwerk (~> 2.6)
     sorbet-static (0.6.12848-universal-darwin)
     sorbet-static (0.6.12848-x86_64-linux)
     sorbet-static-and-runtime (0.6.12848)
       sorbet (= 0.6.12848)
       sorbet-runtime (= 0.6.12848)
+    sorbet-struct-comparable (1.3.0)
+      sorbet-runtime (>= 0.5)
     spoom (1.7.10)
       erubi (>= 1.10.0)
       prism (>= 0.28.0)
@@ -150,6 +160,7 @@ GEM
     yard-sorbet (0.9.0)
       sorbet-runtime
       yard
+    zeitwerk (2.7.4)
 
 PLATFORMS
   arm64-darwin-25
@@ -224,10 +235,13 @@ CHECKSUMS
   simplecov-html (0.13.2) sha256=bd0b8e54e7c2d7685927e8d6286466359b6f16b18cb0df47b508e8d73c777246
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
   sorbet (0.6.12848) sha256=996776913b0d45a5bec8ac2abb7dccba5adbf5ac4a6e49dacd0f9d055ef95a72
+  sorbet-result (1.4.0) sha256=194eededbcb78cf04ee2db8bd3b19e76f305dc043062ed90c56b4b9eac268ccd
   sorbet-runtime (0.6.12848) sha256=25d115576572dffbc4f22fc627709e91af335ce175d564b0adf6d735c1a04239
+  sorbet-schema (0.9.3) sha256=ef87356e82c9dff6671e11372a0515f736504e81b2d9753e01c3b79d2530a84b
   sorbet-static (0.6.12848-universal-darwin) sha256=08ef8efc749da6d4bec811c40e1f0ac40a675a5338cc1f114f2596c02ee3c142
   sorbet-static (0.6.12848-x86_64-linux) sha256=f1d41763c67a2a1bc3ad8589faaac17d3fd676868f9e31a942bf56f2d5589e05
   sorbet-static-and-runtime (0.6.12848) sha256=f48af534cb726df7543d4af9573e99a2c824c8438945f432cc4fbe4a994833c3
+  sorbet-struct-comparable (1.3.0) sha256=337aff31c4eda80554485f9a30201067bf54fcd76bd992494a0d8c32fb04036b
   spoom (1.7.10) sha256=7e500f004857bcbed5dff09c25720d4693e80accd783945136fafc9e5a4de44b
   stringio (3.1.9) sha256=c111af13d3a73eab96a3bc2655ecf93788d13d28cb8e25c1dcbff89ace885121
   tapioca (0.17.10) sha256=880a682ca8314f798dd09e9f104134fbf1a713c13be51f7dd4741dd434e6471b
@@ -237,6 +251,7 @@ CHECKSUMS
   unicode-emoji (4.1.0) sha256=4997d2d5df1ed4252f4830a9b6e86f932e2013fbff2182a9ce9ccabda4f325a5
   yard (0.9.38) sha256=721fb82afb10532aa49860655f6cc2eaa7130889df291b052e1e6b268283010f
   yard-sorbet (0.9.0) sha256=03d1aa461b9e9c82b886919a13aa3e09fcf4d1852239d2967ed97e92723ffe21
+  zeitwerk (2.7.4) sha256=2bef90f356bdafe9a6c2bd32bcd804f83a4f9b8bc27f3600fff051eb3edcec8b
 
 BUNDLED WITH
   4.0.1
