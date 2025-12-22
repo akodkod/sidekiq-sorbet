@@ -276,12 +276,12 @@ end
 
 ### Matcher Reference
 
-| Matcher | Purpose | Example |
-|---------|---------|---------|
-| `have_arg(name, type)` | Single arg exists with type | `have_arg(:id, Integer)` |
-| `.with_default(val)` | Chain: check default value | `have_arg(:x, Integer).with_default(0)` |
-| `have_args(hash)` | Multiple args with types | `have_args(id: Integer, name: String)` |
-| `.and_arg(name, type)` | Chain: add more args | `have_args(:id, Integer).and_arg(:name, String)` |
-| `accept_args(hash)` | Args pass validation | `accept_args(id: 123)` |
-| `reject_args(hash)` | Args fail validation | `reject_args(id: "bad")` |
-| `.with_error(class, pattern)` | Chain: specific error | `reject_args(x: nil).with_error(InvalidArgsError)` |
+| Matcher                       | Purpose                     | Example                                            |
+|-------------------------------|-----------------------------|----------------------------------------------------|
+| `have_arg(name, type)`        | Single arg exists with type | `have_arg(:id, Integer)`                           |
+| `.with_default(val)`          | Chain: check default value  | `have_arg(:x, Integer).with_default(0)`            |
+| `have_args(hash)`             | Multiple args with types    | `have_args(id: Integer, name: String)`             |
+| `.and_arg(name, type)`        | Chain: add more args        | `have_args(:id, Integer).and_arg(:name, String)`   |
+| `accept_args(hash)`           | Args pass validation        | `accept_args(id: 123)`                             |
+| `reject_args(hash)`           | Args fail validation        | `reject_args(id: "bad")`                           |
+| `.with_error(class, pattern)` | Chain: specific error       | `reject_args(x: nil).with_error(InvalidArgsError)` |
