@@ -16,7 +16,7 @@ module Sidekiq
       # @return [Object] Result of the run method
       # @raise [SerializationError] if deserialization fails
       sig { params(serialized_hash: T::Hash[String, T.untyped]).returns(T.untyped) }
-      def perform(serialized_hash)
+      def perform(serialized_hash = {})
         @args = T.let(
           deserialize_args(serialized_hash),
           T.nilable(T::Struct),
