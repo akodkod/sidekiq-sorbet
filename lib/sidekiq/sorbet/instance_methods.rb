@@ -23,11 +23,6 @@ module Sidekiq
         )
         define_arg_accessors if @args
         run
-      rescue SerializationError
-        raise
-      rescue StandardError => e
-        raise Error,
-              "Error in #{self.class.name}#run: #{e.message}\n#{e.backtrace&.join("\n")}"
       end
 
       # Accessor for typed arguments (optional, for backward compatibility)

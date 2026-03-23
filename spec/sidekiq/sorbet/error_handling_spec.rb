@@ -17,22 +17,6 @@ RSpec.describe "Sidekiq::Sorbet error handling" do
     end
   end
 
-  describe "error wrapping" do
-    context "when run method raises an error" do
-      it "wraps the error with context" do
-        expect do
-          WorkerThatRaisesError.run_sync(message: "boom")
-        end.to raise_error(Sidekiq::Sorbet::Error, /Error in WorkerThatRaisesError#run/)
-      end
-
-      it "includes the original error message" do
-        expect do
-          WorkerThatRaisesError.run_sync(message: "test error")
-        end.to raise_error(Sidekiq::Sorbet::Error, /test error/)
-      end
-    end
-  end
-
   describe "serialization errors" do
     it "raises SerializationError when serialize fails during run_async" do
       expect do
@@ -46,16 +30,6 @@ RSpec.describe "Sidekiq::Sorbet error handling" do
       expect do
         worker.perform({ "value" => 1 })
       end.to raise_error(Sidekiq::Sorbet::SerializationError, /Failed to deserialize/)
-    end
-
-    it "wraps StandardError from run method with context" do
-      worker = WorkerThatRaisesError.new
-      worker.instance_variable_set(:@args, WorkerThatRaisesError::Args.new(message: "boom"))
-      worker.define_arg_accessors
-
-      expect do
-        worker.perform({ "message" => "test" })
-      end.to raise_error(Sidekiq::Sorbet::Error, /Error in WorkerThatRaisesError#run/)
     end
   end
 
