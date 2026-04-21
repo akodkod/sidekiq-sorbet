@@ -3,8 +3,11 @@
 require "simplecov"
 SimpleCov.start
 
+require "sidekiq"
 require "sidekiq/sorbet"
-require "sidekiq/testing"
+
+# Enable fake mode for Sidekiq
+Sidekiq.testing!(:fake)
 
 # Load all test workers
 Dir[File.join(__dir__, "support/workers/**/*.rb")].each { |file| require file }
