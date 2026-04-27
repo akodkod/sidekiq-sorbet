@@ -91,7 +91,7 @@ module Tapioca
           klass.create_method(
             "run_async",
             parameters: build_params_signature,
-            return_type: "String",
+            return_type: "T.nilable(String)",
             class_method: true,
           )
         end
@@ -101,7 +101,7 @@ module Tapioca
           klass.create_method(
             "run_at",
             parameters: build_time_params_signature,
-            return_type: "String",
+            return_type: "T.nilable(String)",
             class_method: true,
           )
         end
@@ -111,7 +111,7 @@ module Tapioca
           klass.create_method(
             "run_in",
             parameters: build_interval_params_signature,
-            return_type: "String",
+            return_type: "T.nilable(String)",
             class_method: true,
           )
         end

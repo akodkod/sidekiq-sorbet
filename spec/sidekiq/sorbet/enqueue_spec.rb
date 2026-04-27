@@ -15,6 +15,26 @@ RSpec.describe "Sidekiq::Sorbet enqueueing jobs" do
         expect(jid).not_to be_empty
       end
 
+      it "returns nil when a client middleware halts enqueueing" do
+        cancelling_middleware = Class.new do
+          def call(_worker_class, _job, _queue, _redis_pool)
+            false
+          end
+        end
+
+        Sidekiq.default_configuration.client_middleware do |chain|
+          chain.add(cancelling_middleware)
+        end
+
+        begin
+          expect(SimpleWorker.run_async(value: 10)).to be_nil
+        ensure
+          Sidekiq.default_configuration.client_middleware do |chain|
+            chain.remove(cancelling_middleware)
+          end
+        end
+      end
+
       it "validates arguments before enqueueing" do
         expect do
           SimpleWorker.run_async(value: 5)

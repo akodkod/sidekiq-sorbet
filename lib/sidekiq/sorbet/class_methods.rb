@@ -12,10 +12,10 @@ module Sidekiq
       # Enqueues a job asynchronously with validated arguments
       #
       # @param kwargs [Hash] Arguments matching the Args T::Struct (or empty if no Args)
-      # @return [String] Sidekiq job ID
+      # @return [String, nil] Sidekiq job ID, or nil if a client middleware halts enqueueing
       # @raise [InvalidArgsError] if arguments fail validation
       # @raise [SerializationError] if serialization fails
-      sig { params(kwargs: T.untyped).returns(String) }
+      sig { params(kwargs: T.untyped).returns(T.nilable(String)) }
       def run_async(**kwargs)
         args_instance = build_args(**kwargs)
         serialized = serialize_args(args_instance)
@@ -26,10 +26,10 @@ module Sidekiq
       #
       # @param time [Time, Numeric] When to perform the job (timestamp or Time object)
       # @param kwargs [Hash] Arguments matching the Args T::Struct (or empty if no Args)
-      # @return [String] Sidekiq job ID
+      # @return [String, nil] Sidekiq job ID, or nil if a client middleware halts enqueueing
       # @raise [InvalidArgsError] if arguments fail validation
       # @raise [SerializationError] if serialization fails
-      sig { params(time: T.any(Time, Numeric), kwargs: T.untyped).returns(String) }
+      sig { params(time: T.any(Time, Numeric), kwargs: T.untyped).returns(T.nilable(String)) }
       def run_at(time, **kwargs)
         args_instance = build_args(**kwargs)
         serialized = serialize_args(args_instance)
@@ -40,10 +40,10 @@ module Sidekiq
       #
       # @param interval [Numeric] How long to wait before performing (in seconds)
       # @param kwargs [Hash] Arguments matching the Args T::Struct (or empty if no Args)
-      # @return [String] Sidekiq job ID
+      # @return [String, nil] Sidekiq job ID, or nil if a client middleware halts enqueueing
       # @raise [InvalidArgsError] if arguments fail validation
       # @raise [SerializationError] if serialization fails
-      sig { params(interval: Numeric, kwargs: T.untyped).returns(String) }
+      sig { params(interval: Numeric, kwargs: T.untyped).returns(T.nilable(String)) }
       def run_in(interval, **kwargs)
         args_instance = build_args(**kwargs)
         serialized = serialize_args(args_instance)

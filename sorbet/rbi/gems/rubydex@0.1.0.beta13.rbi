@@ -113,6 +113,12 @@ class Rubydex::Declaration
   sig { returns(Rubydex::Declaration) }
   def owner; end
 
+  # @abstract
+  #
+  # pkg:gem/rubydex#lib/rubydex/declaration.rb:7
+  sig { returns(T::Enumerable[Rubydex::Reference]) }
+  def references; end
+
   # pkg:gem/rubydex#lib/rubydex.rb:11
   sig { returns(String) }
   def unqualified_name; end
@@ -352,6 +358,9 @@ class Rubydex::Graph
   # pkg:gem/rubydex#lib/rubydex/graph.rb:32
   sig { returns(T::Array[String]) }
   def index_workspace; end
+
+  # pkg:gem/rubydex#lib/rubydex.rb:11
+  def keyword(_arg0); end
 
   # pkg:gem/rubydex#lib/rubydex.rb:11
   sig { returns(T::Enumerable[Rubydex::MethodReference]) }
